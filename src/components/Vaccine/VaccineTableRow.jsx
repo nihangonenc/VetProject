@@ -1,30 +1,28 @@
-import { deleteAnimalById } from "../../services/AnimalApiService";
-import { useAnimal } from "../../contexts/AnimalContext";
+import { deleteVaccineById } from "../../services/VaccineApiService";
+import { useVaccine } from "../../contexts/VaccineContext";
 import { NavLink } from "react-router-dom";
 import { styled } from "@mui/material/styles";
 import TableCell, { tableCellClasses } from "@mui/material/TableCell";
 import TableRow from "@mui/material/TableRow";
 import IconButton from "@mui/material/IconButton";
-import DeleteIcon from "@mui/icons-material/Delete";
 import EditOutlinedIcon from "@mui/icons-material/EditOutlined";
+import DeleteIcon from "@mui/icons-material/Delete";
 import { format } from "date-fns";
 
-function AnimalTableRow({
+function VaccineTableRow({
   id,
   name,
-  species,
-  breed,
-  gender,
-  colour,
-  dateOfBirth,
-  customer,
+  code,
+  protectionStartDate,
+  protectionFinishDate,
+  animal,
 }) {
-  const { removeAnimalById } = useAnimal();
+  const { removeVaccineById } = useVaccine();
 
-  async function deleteAnimal() {
+  async function deleteVaccine() {
     try {
-      await deleteAnimalById(id);
-      removeAnimalById(id);
+      await deleteVaccineById(id);
+      removeVaccineById(id);
     } catch (error) {
       console.error("Error fetching products:", error);
     }
@@ -53,21 +51,22 @@ function AnimalTableRow({
   return (
     <StyledTableRow>
       <StyledTableCell align="center">{name}</StyledTableCell>
-      <StyledTableCell align="center">{species}</StyledTableCell>
-      <StyledTableCell align="center">{breed}</StyledTableCell>
-      <StyledTableCell align="center">{gender}</StyledTableCell>
-      <StyledTableCell align="center">{colour}</StyledTableCell>
+      <StyledTableCell align="center">{code}</StyledTableCell>
       <StyledTableCell align="center">
-        {format(new Date(dateOfBirth), "dd/MM/yyyy")}
+        {format(new Date(protectionStartDate), "dd/MM/yyyy")}
       </StyledTableCell>
-      <StyledTableCell align="center">{customer?.name}</StyledTableCell>
+      <StyledTableCell align="center">
+        {format(new Date(protectionFinishDate), "dd/MM/yyyy")}
+      </StyledTableCell>
+      <StyledTableCell align="center">{animal?.name}</StyledTableCell>
+
       <StyledTableCell align="center">
         <IconButton aria-label="fingerprint" color="success">
-          <NavLink to={`/animal/${id}/edit`}>
+          <NavLink to={`${id}/edit`}>
             <EditOutlinedIcon color="success" />
           </NavLink>
         </IconButton>
-        <IconButton aria-label="delete" onClick={deleteAnimal}>
+        <IconButton aria-label="delete" onClick={deleteVaccine}>
           <DeleteIcon />
         </IconButton>
       </StyledTableCell>
@@ -75,4 +74,4 @@ function AnimalTableRow({
   );
 }
 
-export default AnimalTableRow;
+export default VaccineTableRow;

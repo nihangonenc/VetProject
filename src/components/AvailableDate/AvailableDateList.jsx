@@ -35,7 +35,7 @@ function AvailableDateList() {
     },
   }));
   return (
-    <>
+    <div style={{ marginBottom: "20px" }}>
       <CreateAvailableDateForm />
       <h2
         style={{ textAlign: "center", color: "#5d4037", marginBottom: "20px" }}
@@ -46,10 +46,9 @@ function AvailableDateList() {
         <Table aria-label="customized table">
           <TableHead>
             <TableRow>
-              <StyledTableCell>ID</StyledTableCell>
-              <StyledTableCell>Work Days</StyledTableCell>
-              <StyledTableCell>Doctor Name</StyledTableCell>
-              <StyledTableCell>Operations</StyledTableCell>
+              <StyledTableCell align="center">Work Days</StyledTableCell>
+              <StyledTableCell align="center">Doctor Name</StyledTableCell>
+              <StyledTableCell align="center">Operations</StyledTableCell>
             </TableRow>
           </TableHead>
           <TableBody>
@@ -62,7 +61,7 @@ function AvailableDateList() {
           </TableBody>
         </Table>
       </TableContainer>
-    </>
+    </div>
   );
 }
 

@@ -1,12 +1,10 @@
 import React from "react";
-import { useRef } from "react";
+import { useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { createCustomer } from "../../services/CustomerApiService";
 import { useCustomer } from "../../contexts/CustomerContext";
-import Box from "@mui/material/Box";
 import TextField from "@mui/material/TextField";
 import Button from "@mui/material/Button";
-
 import SendIcon from "@mui/icons-material/Send";
 
 function CreateCustomerForm() {
@@ -17,15 +15,17 @@ function CreateCustomerForm() {
   const mailRef = useRef();
   const cityRef = useRef();
   const { addCustomer } = useCustomer();
+  const [errorMessage, setErrorMessage] = useState("");
 
   async function add(target) {
     target.preventDefault();
+    const checkEmptyName = (value) => (value === "" ? null : value);
 
     try {
       const newCustomer = {
-        name: nameRef.current.value,
+        name: checkEmptyName(nameRef.current.value),
         phone: phoneRef.current.value,
-        mail: mailRef.current.value,
+        mail: checkEmptyName(mailRef.current.value),
         address: addressRef.current.value,
         city: cityRef.current.value,
       };
@@ -38,7 +38,12 @@ function CreateCustomerForm() {
         navigate("/customer");
       }
     } catch (error) {
-      console.error("error", error);
+      if (nameRef.current.value === "") {
+        setErrorMessage(error.response.data.data[0]);
+      } else {
+        setErrorMessage(error.response.data.message);
+      }
+      setTimeout(() => setErrorMessage(""), 3000);
     }
   }
 
@@ -122,6 +127,18 @@ function CreateCustomerForm() {
           Add
         </Button>
       </form>
+      {errorMessage && (
+        <div
+          style={{
+            color: "#a20622",
+            marginTop: "5px",
+            display: "flex",
+            justifyContent: "center",
+          }}
+        >
+          {errorMessage}
+        </div>
+      )}
     </div>
   );
 }

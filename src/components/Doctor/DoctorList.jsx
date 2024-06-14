@@ -1,6 +1,6 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import DoctorTableRow from "./DoctorTableRow";
-import { getDoctors } from "../../services/DoctorApiServise";
+import { getDoctors, getDoctorsByName } from "../../services/DoctorApiServise";
 import { useDoctor } from "../../contexts/DoctorContext";
 import { styled } from "@mui/material/styles";
 import Table from "@mui/material/Table";
@@ -12,21 +12,41 @@ import TableRow from "@mui/material/TableRow";
 import Paper from "@mui/material/Paper";
 import CreateDoctorForm from "./CreateDoctorForm";
 import AvailableDateList from "../AvailableDate/AvailableDateList";
+import TextField from "@mui/material/TextField";
+import SearchOutlinedIcon from "@mui/icons-material/SearchOutlined";
+import InputAdornment from "@mui/material/InputAdornment";
 
 function DoctorList() {
   const { doctors, updateDoctors } = useDoctor();
+  const [searchName, setSearchName] = useState("");
 
   useEffect(() => {
-    async function fetchData() {
-      try {
-        const doctors = await getDoctors();
-        updateDoctors(doctors);
-      } catch (error) {
-        console.error("Error fetching doctors:", error);
+    if (searchName === "") {
+      async function fetchData() {
+        try {
+          const doctors = await getDoctors();
+          updateDoctors(doctors);
+        } catch (error) {
+          console.error("Error fetching doctors:", error);
+        }
       }
+      fetchData();
     }
-    fetchData();
-  }, []);
+  }, [searchName]);
+
+  useEffect(() => {
+    if (searchName !== "") {
+      async function fetchData() {
+        try {
+          const doctors = await getDoctorsByName(searchName);
+          updateDoctors(doctors);
+        } catch (error) {
+          console.error("Error fetching doctors:", error);
+        }
+      }
+      fetchData();
+    }
+  }, [searchName]);
 
   const StyledTableCell = styled(TableCell)(() => ({
     [`&.${tableCellClasses.head}`]: {
@@ -36,25 +56,57 @@ function DoctorList() {
     },
   }));
   return (
-    <>
+    <div style={{ marginBottom: "20px" }}>
       <CreateDoctorForm />
-      <h2
-        style={{ textAlign: "center", color: "#5d4037", marginBottom: "20px" }}
+      <div
+        style={{
+          display: "flex",
+          flexDirection: "row",
+          justifyContent: "flex-end",
+          gap: "200px",
+          marginRight: "250px",
+          marginBottom: "25px",
+        }}
       >
-        Vet Team
-      </h2>
+        <h2
+          style={{
+            textAlign: "center",
+            color: "#5d4037",
+            marginBottom: "20px",
+          }}
+        >
+          Vet Team
+        </h2>
+        <TextField
+          id="outlined-basic"
+          label="Search By Name"
+          placeholder="Search By Name"
+          variant="outlined"
+          color="success"
+          value={searchName}
+          type="text"
+          name="name"
+          onChange={(e) => setSearchName(e.target.value)}
+          InputProps={{
+            startAdornment: (
+              <InputAdornment position="start">
+                <SearchOutlinedIcon />
+              </InputAdornment>
+            ),
+          }}
+        />
+      </div>
       <TableContainer component={Paper} className="table">
         <Table aria-label="customized table">
           <TableHead>
             <TableRow>
-              <StyledTableCell>ID</StyledTableCell>
-              <StyledTableCell>Name</StyledTableCell>
-              <StyledTableCell>Phone</StyledTableCell>
-              <StyledTableCell>Mail</StyledTableCell>
-              <StyledTableCell>Address</StyledTableCell>
-              <StyledTableCell>City</StyledTableCell>
-              <StyledTableCell>Work Days</StyledTableCell>
-              <StyledTableCell>Operations</StyledTableCell>
+              <StyledTableCell align="center">Name</StyledTableCell>
+              <StyledTableCell align="center">Phone</StyledTableCell>
+              <StyledTableCell align="center">Mail</StyledTableCell>
+              <StyledTableCell align="center">Address</StyledTableCell>
+              <StyledTableCell align="center">City</StyledTableCell>
+              <StyledTableCell align="center">Work Days</StyledTableCell>
+              <StyledTableCell align="center">Operations</StyledTableCell>
             </TableRow>
           </TableHead>
           <TableBody>
@@ -65,7 +117,7 @@ function DoctorList() {
         </Table>
       </TableContainer>
       <AvailableDateList />
-    </>
+    </div>
   );
 }
 

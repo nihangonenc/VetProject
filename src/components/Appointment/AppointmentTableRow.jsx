@@ -5,10 +5,12 @@ import { styled } from "@mui/material/styles";
 import TableCell, { tableCellClasses } from "@mui/material/TableCell";
 import TableRow from "@mui/material/TableRow";
 import IconButton from "@mui/material/IconButton";
-import Fingerprint from "@mui/icons-material/Fingerprint";
 import DeleteIcon from "@mui/icons-material/Delete";
+import AddOutlinedIcon from "@mui/icons-material/AddOutlined";
+import EditOutlinedIcon from "@mui/icons-material/EditOutlined";
+import { format } from "date-fns"; // tarih-saat formatı için yükledim
 
-function AppointmentTableRow({ id, appointmentDate, animal, doctor }) {
+function AppointmentTableRow({ id, appointmentDate, animal, doctor, report }) {
   const { removeAppointmentById } = useAppointment();
 
   async function deleteAppointment() {
@@ -42,29 +44,40 @@ function AppointmentTableRow({ id, appointmentDate, animal, doctor }) {
 
   return (
     <StyledTableRow>
-      <StyledTableCell>{id}</StyledTableCell>
-      <StyledTableCell>{appointmentDate}</StyledTableCell>
-      <StyledTableCell>{animal?.name}</StyledTableCell>
-      <StyledTableCell>{doctor?.name}</StyledTableCell>
+      <StyledTableCell align="center">
+        {format(new Date(appointmentDate), "dd/MM/yyyy HH:mm")}
+      </StyledTableCell>
+      <StyledTableCell align="center">{animal?.name}</StyledTableCell>
+      <StyledTableCell align="center">{doctor?.name}</StyledTableCell>
 
-      <StyledTableCell>
-        <NavLink
-          style={{ textDecoration: "none", color: "#5d4037" }}
-          to={{
-            pathname: "/report",
-            state: { appointment: { id, appointmentDate, animal, doctor } },
-          }}
-        >
-          add report
-        </NavLink>
-        <IconButton aria-label="fingerprint" color="success">
+      <StyledTableCell
+        style={{
+          display: "flex",
+          flexDirection: "row",
+          alignItems: "center",
+          justifyContent: "center",
+        }}
+      >
+        {report === null && (
           <NavLink
-            style={{ textDecoration: "none", color: "#5d4037" }}
-            to={`/appointment/${id}/edit`}
+            style={{
+              display: "flex",
+              flexDirection: "row",
+              alignItems: "center",
+              textDecoration: "none",
+              color: "#5d4037",
+            }}
+            to={`${id}/add/report`}
           >
-            edit
+            report
+            <AddOutlinedIcon color="success" />
           </NavLink>
-          <Fingerprint />
+        )}
+
+        <IconButton aria-label="fingerprint" color="success">
+          <NavLink to={`/appointment/${id}/edit`}>
+            <EditOutlinedIcon color="success" />
+          </NavLink>
         </IconButton>
         <IconButton aria-label="delete" onClick={deleteAppointment}>
           <DeleteIcon />

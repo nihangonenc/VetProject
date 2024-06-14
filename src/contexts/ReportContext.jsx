@@ -39,7 +39,7 @@ export const ReportContextProvider = ({ children }) => {
 export const useReport = () => {
   const context = useContext(ReportContext);
   if (context === undefined) {
-    throw new Error("useTheme must be used within a ThemeProvider");
+    throw new Error("useReport must be used within a ReportContextProvider");
   }
   return context;
 };

@@ -39,7 +39,7 @@ export const DoctorContextProvider = ({ children }) => {
 export const useDoctor = () => {
   const context = useContext(DoctorContext);
   if (context === undefined) {
-    throw new Error("useTheme must be used within a ThemeProvider");
+    throw new Error("useDoctor must be used within a DoctorContextProvider");
   }
   return context;
 };

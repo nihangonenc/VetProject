@@ -5,10 +5,9 @@ import { styled } from "@mui/material/styles";
 import TableCell, { tableCellClasses } from "@mui/material/TableCell";
 import TableRow from "@mui/material/TableRow";
 import IconButton from "@mui/material/IconButton";
-import Fingerprint from "@mui/icons-material/Fingerprint";
+import EditOutlinedIcon from "@mui/icons-material/EditOutlined";
 import DeleteIcon from "@mui/icons-material/Delete";
-import UpdateAvailableDateForm from "./UpdateAvailableDateForm";
-
+import { format } from "date-fns";
 function AvailableDateTableRow({ id, availableDate, doctor }) {
   const { removeAvailableDateById } = useAvailableDate();
 
@@ -43,18 +42,15 @@ function AvailableDateTableRow({ id, availableDate, doctor }) {
 
   return (
     <StyledTableRow>
-      <StyledTableCell>{id}</StyledTableCell>
-      <StyledTableCell>{availableDate}</StyledTableCell>
-      <StyledTableCell>{doctor?.name}</StyledTableCell>
-      <StyledTableCell>
+      <StyledTableCell align="center">
+        {format(new Date(availableDate), "dd/MM/yyyy")}
+      </StyledTableCell>
+      <StyledTableCell align="center">{doctor?.name}</StyledTableCell>
+      <StyledTableCell align="center">
         <IconButton aria-label="fingerprint" color="success">
-          <NavLink
-            style={{ textDecoration: "none", color: "#5d4037" }}
-            to={`date/${id}/edit`}
-          >
-            edit
+          <NavLink to={`date/${id}/edit`}>
+            <EditOutlinedIcon color="success" />
           </NavLink>
-          <Fingerprint />
         </IconButton>
         <IconButton aria-label="delete" onClick={deleteAvailableDate}>
           <DeleteIcon />

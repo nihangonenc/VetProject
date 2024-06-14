@@ -43,7 +43,9 @@ export const AppointmentContextProvider = ({ children }) => {
 export const useAppointment = () => {
   const context = useContext(AppointmentContext);
   if (context === undefined) {
-    throw new Error("useTheme must be used within a ThemeProvider");
+    throw new Error(
+      "useAppointment must be used within a AppointmentContextProvider"
+    );
   }
   return context;
 };

@@ -3,49 +3,35 @@
     padding: 0;
     box-sizing: border-box;
     font-family: "Poppins", sans-serif;
-    
 }
-
 nav {
     background: rgb(237,248,231);
     display: flex;
     align-items: center;
-    justify-content: center;
-    margin: 20px 20px;
-    border-radius: 50px;
+    justify-content:center;
     padding: 10px;
     box-shadow: 0 25px 20px -20px rgba(0, 0, 0, 0.4);
-    background-image: url(./assets/pets.jpeg);
-    background-position-y:bottom;
-    background-size: cover;
-    
+    background-image: url(./assets/patii.jpeg);
+    background-position: center;
 }
-
-
 .link {
     list-style: none;
     text-decoration: none;
     display: inline-block;
-    /* padding: 15px 35px; */
     margin: 20px 35px;
     padding: 5px;
     font-size: 21px;
     font-weight: 1000;
-    /* color:#6bb518; */
-    color: rgb(55, 126, 34);
+    color: #026222;
     cursor: pointer;
     position: relative;
     z-index: 2;
     transition: color 0.5s;
-    background-color: rgb(204, 233, 187, 0.7);
     border-radius: 5rem;
- 
-    
-
 }
-/* .link::after {
+.link::after {
     content: "";
-    background: #777;
+    background: #a5a4a4b8;
     width: 100%;
     height: 100%;
     border-radius: 30px;
@@ -56,17 +42,12 @@ nav {
     z-index: -1;
     opacity: 0;
     transition: top 0.5s, opacity 0.5s;
-} */
-.link:hover {
-    color: rgb(204, 233, 187, 0.7);
-    background-color: rgb(55, 126, 34);
-    
-
 }
-/* .link:hover::after {
+
+.link:hover::after {
     top: 50%;
     opacity: 1;
-} */
+}
 .table td{
     padding: 2px;
    
@@ -75,4 +56,34 @@ nav {
     max-width: 1200px;
     margin:auto;
 }
+.home{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+
+}
+.home > p {
+    font-size: 30px;
+    color: #5d4037;
+    font-weight: bolder;
+    margin-top: 70px;
+}
+.home >img {
+    left: 50%;       
+    width: 1200px;
+    height: auto;  
+    margin-top: 15%;
+}
+.welcome {
+    text-decoration: none;
+    color: #026222;
+    padding: 10px;
+    border: 2px solid #026222;
+    border-radius: 2rem;
+}
+.welcome:hover {
+    background-color: #026222;
+    color: white;
+}
+
 

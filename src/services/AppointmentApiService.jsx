@@ -48,3 +48,34 @@ export const deleteAppointmentById = async (id) => {
     throw error;
   }
 };
+export const getAppointmentSearchByAnimalAndDate = async (
+  name,
+  startDate,
+  finishDate
+) => {
+  // hayvan ismi ve tarih aralığına göre filtreleme
+  try {
+    const response = await axios.get(
+      `${apiUrl}/searchByAnimalNameAndDate?animalName=${name}&startDate=${startDate}&finishDate=${finishDate}`
+    );
+    return response.data.data;
+  } catch (error) {
+    throw error;
+  }
+};
+export const getAppointmentSearchByDoctorAndDate = async (
+  name,
+  startDate,
+  finishDate
+) => {
+  // doktor ismi ve tarih aralığına göre filtreleme
+  try {
+    const response = await axios.get(
+      `${apiUrl}/searchByDoctorNameAndDate?doctorName=${name}&startDate=${startDate}&finishDate=${finishDate}`
+    );
+
+    return response.data.data;
+  } catch (error) {
+    throw error;
+  }
+};

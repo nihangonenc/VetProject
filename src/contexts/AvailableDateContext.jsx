@@ -43,7 +43,9 @@ export const AvailableDateContextProvider = ({ children }) => {
 export const useAvailableDate = () => {
   const context = useContext(AvailableDateContext);
   if (context === undefined) {
-    throw new Error("useTheme must be used within a ThemeProvider");
+    throw new Error(
+      "useAvailableDate must be used within a AvailableDateContextProvider"
+    );
   }
   return context;
 };

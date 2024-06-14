@@ -48,3 +48,12 @@ export const deleteDoctorById = async (id) => {
     throw error;
   }
 };
+export const getDoctorsByName = async (name) => {
+  //doktor ismine göre filtreleme
+  try {
+    const response = await axios.get(`${apiUrl}/searchByName?name=${name}`);
+    return response.data.data;
+  } catch (error) {
+    throw error;
+  }
+};

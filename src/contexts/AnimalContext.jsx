@@ -40,7 +40,7 @@ export const useAnimal = () => {
   const context = useContext(AnimalContext);
   if (context === undefined) {
     //provider ile sarmalanmalı. Yoksa hata fırlattık.
-    throw new Error("useTheme must be used within a ThemeProvider");
+    throw new Error("useAnimal must be used within a AnimalContextProvider");
   }
   return context;
 };

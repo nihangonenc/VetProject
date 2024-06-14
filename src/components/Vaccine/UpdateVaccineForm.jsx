@@ -1,25 +1,25 @@
 import { useEffect } from "react";
 import {
-  getReportById,
-  updateReportById,
-} from "../../services/ReportApiService";
+  getVaccineById,
+  updateVaccineById,
+} from "../../services/VaccineApiService";
 import { useNavigate, useParams } from "react-router-dom";
-import { useReport } from "../../contexts/ReportContext";
+import { useVaccine } from "../../contexts/VaccineContext";
 import TextField from "@mui/material/TextField";
 import Button from "@mui/material/Button";
 import SendIcon from "@mui/icons-material/Send";
 
-function UpdateReportForm() {
+function UpdateVaccineForm() {
   const { id } = useParams();
   const navigate = useNavigate();
-  const { report, updateReport } = useReport();
+  const { vaccine, updateVaccine } = useVaccine();
 
   async function update(target) {
     target.preventDefault();
     try {
-      const response = await updateReportById(report);
+      const response = await updateVaccineById(vaccine);
 
-      navigate("/report");
+      navigate("/vaccine");
     } catch (error) {
       console.error("error", error);
     }
@@ -28,8 +28,8 @@ function UpdateReportForm() {
   useEffect(() => {
     async function fetchData() {
       try {
-        const report = await getReportById(id);
-        updateReport(report);
+        const vaccine = await getVaccineById(id);
+        updateVaccine(vaccine);
       } catch (error) {
         console.error("error", error);
       }
@@ -40,11 +40,20 @@ function UpdateReportForm() {
   const handleChange = (event) => {
     const { id, value } = event.target;
     switch (id) {
-      case "title":
-        updateReport({ ...report, title: value === "" ? null : value });
+      case "name":
+        updateVaccine({ ...vaccine, name: value === "" ? null : value });
         break;
-      case "price":
-        updateReport({ ...report, price: value === "" ? null : value });
+      case "protectionStartDate":
+        updateVaccine({
+          ...vaccine,
+          protectionStartDate: value === "" ? null : value,
+        });
+        break;
+      case "protectionFinishDate":
+        updateVaccine({
+          ...vaccine,
+          protectionFinishDate: value === "" ? null : value,
+        });
         break;
 
       default:
@@ -56,7 +65,7 @@ function UpdateReportForm() {
       <h2
         style={{ textAlign: "center", color: "#5d4037", marginBottom: "20px" }}
       >
-        Update Report Form
+        Update Vaccine Form
       </h2>
       <form
         style={{
@@ -71,7 +80,7 @@ function UpdateReportForm() {
           <TextField
             variant="outlined"
             onChange={handleChange}
-            value={report.title || ""}
+            value={vaccine.name || ""}
             type="text"
             id="title"
             color="success"
@@ -81,8 +90,18 @@ function UpdateReportForm() {
           <TextField
             variant="outlined"
             onChange={handleChange}
-            value={report.price || ""}
-            type="text"
+            value={vaccine.protectionStartDate || ""}
+            type="date"
+            id="price"
+            color="success"
+          />
+        </div>
+        <div>
+          <TextField
+            variant="outlined"
+            onChange={handleChange}
+            value={vaccine.protectionFinishDate || ""}
+            type="date"
             id="price"
             color="success"
           />
@@ -92,20 +111,10 @@ function UpdateReportForm() {
           <TextField
             variant="outlined"
             type="text"
-            id="customer"
+            id="animal"
             color="grey"
             disabled={true}
-            value={report?.appointment?.animal?.name || ""}
-          />
-        </div>
-        <div>
-          <TextField
-            variant="outlined"
-            type="text"
-            id="customer"
-            color="grey"
-            disabled={true}
-            value={report?.appointment?.doctor?.name || ""}
+            value={vaccine?.animal?.name || ""}
           />
         </div>
         <Button
@@ -121,4 +130,4 @@ function UpdateReportForm() {
   );
 }
 
-export default UpdateReportForm;
+export default UpdateVaccineForm;

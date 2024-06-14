@@ -17,6 +17,8 @@ function CreateAvailableDateForm() {
   const availableDateRef = useRef();
   const { addAvailableDate } = useAvailableDate();
   const navigate = useNavigate();
+  const today = new Date().toISOString().split("T")[0];
+  const [errorMessage, setErrorMessage] = useState("");
 
   useEffect(() => {
     const loadDoctors = async () => {
@@ -38,6 +40,7 @@ function CreateAvailableDateForm() {
 
   async function add(target) {
     target.preventDefault();
+    const checkEmptyName = (value) => (value === "" ? null : value);
 
     try {
       const selectedDoctor = doctors.find(
@@ -46,7 +49,7 @@ function CreateAvailableDateForm() {
 
       const newAvailableDate = {
         availableDate: availableDateRef.current.value,
-        doctor: selectedDoctor,
+        doctor: checkEmptyName(selectedDoctor),
       };
 
       const response = await createAvailableDate(newAvailableDate);
@@ -54,6 +57,12 @@ function CreateAvailableDateForm() {
       navigate("/doctor");
     } catch (error) {
       console.error("error", error);
+      if (selectedDoctorId === "") {
+        setErrorMessage(error.response.data.data[0]);
+      } else {
+        setErrorMessage(error.response.data.message);
+      }
+      setTimeout(() => setErrorMessage(""), 3000);
     }
   }
 
@@ -82,6 +91,7 @@ function CreateAvailableDateForm() {
             type="date"
             name="Work Day"
             color="success"
+            defaultValue={today}
           />
         </div>
 
@@ -94,6 +104,7 @@ function CreateAvailableDateForm() {
             label="Vet*"
             color="success"
             onChange={handleDoctorSelectChange}
+            sx={{ minWidth: 150 }}
           >
             {doctors?.map((doctor) => (
               <MenuItem key={doctor.id} value={doctor.id}>
@@ -111,6 +122,18 @@ function CreateAvailableDateForm() {
           Add
         </Button>
       </form>
+      {errorMessage && (
+        <div
+          style={{
+            color: "#a20622",
+            marginTop: "5px",
+            display: "flex",
+            justifyContent: "center",
+          }}
+        >
+          {errorMessage}
+        </div>
+      )}
     </div>
   );
 }

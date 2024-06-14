@@ -5,10 +5,11 @@ import { styled } from "@mui/material/styles";
 import TableCell, { tableCellClasses } from "@mui/material/TableCell";
 import TableRow from "@mui/material/TableRow";
 import IconButton from "@mui/material/IconButton";
-import Fingerprint from "@mui/icons-material/Fingerprint";
+import EditOutlinedIcon from "@mui/icons-material/EditOutlined";
 import DeleteIcon from "@mui/icons-material/Delete";
+import AddOutlinedIcon from "@mui/icons-material/AddOutlined";
 
-function ReportTableRow({ id, title, price, vaccineList, appointment }) {
+function ReportTableRow({ id, title, price, appointment }) {
   const { removeReportById } = useReport();
 
   async function deleteReport() {
@@ -42,30 +43,41 @@ function ReportTableRow({ id, title, price, vaccineList, appointment }) {
 
   return (
     <StyledTableRow>
-      <StyledTableCell>{id}</StyledTableCell>
-      <StyledTableCell>{title}</StyledTableCell>
-      <StyledTableCell>{price}</StyledTableCell>
-      <StyledTableCell>
-        <select>
-          {vaccineList?.map((item, index) => (
-            <option key={index} value={item.id}>
-              {item.name}
-            </option>
-          ))}
-        </select>
+      <StyledTableCell align="center">{title}</StyledTableCell>
+      <StyledTableCell align="center">{price}</StyledTableCell>
+      <StyledTableCell align="center">
+        {appointment?.doctor?.name}
+      </StyledTableCell>
+      <StyledTableCell align="center">
+        {appointment?.animal?.name}
       </StyledTableCell>
 
-      <StyledTableCell>{appointment?.doctor?.name}</StyledTableCell>
-      <StyledTableCell>{appointment?.animal?.name}</StyledTableCell>
-      <StyledTableCell>
+      <StyledTableCell
+        style={{
+          display: "flex",
+          flexDirection: "row",
+          alignItems: "center",
+          justifyContent: "center",
+        }}
+      >
+        <NavLink
+          style={{
+            display: "flex",
+            flexDirection: "row",
+            alignItems: "center",
+            textDecoration: "none",
+            color: "#5d4037",
+          }}
+          to={`${id}/add/vaccine`}
+        >
+          vaccine
+          <AddOutlinedIcon color="success" />
+        </NavLink>
+
         <IconButton aria-label="fingerprint" color="success">
-          <NavLink
-            style={{ textDecoration: "none", color: "#5d4037" }}
-            to={`${id}/edit`}
-          >
-            edit
+          <NavLink to={`${id}/edit`}>
+            <EditOutlinedIcon color="success" />
           </NavLink>
-          <Fingerprint />
         </IconButton>
         <IconButton aria-label="delete" onClick={deleteReport}>
           <DeleteIcon />

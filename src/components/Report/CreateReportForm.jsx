@@ -1,56 +1,43 @@
 import React, { useRef, useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { createReport } from "../../services/ReportApiService";
 import { useReport } from "../../contexts/ReportContext";
-import { getAppointments } from "../../services/AppointmentApiService";
+import { getAppointmentById } from "../../services/AppointmentApiService";
 import TextField from "@mui/material/TextField";
 import Button from "@mui/material/Button";
 import SendIcon from "@mui/icons-material/Send";
-import Select from "@mui/material/Select";
-import InputLabel from "@mui/material/InputLabel";
-import MenuItem from "@mui/material/MenuItem";
-import FormControl from "@mui/material/FormControl";
-import { useLocation } from "react-router-dom";
+
 function CreateReportForm() {
-  const [appointments, setAppointments] = useState([]);
-  const [selectedAppointmentId, setSelectedAppointmentId] = useState("");
   const titleRef = useRef();
   const priceRef = useRef();
-  const location = useLocation();
-  const { appointment } = location.state || {};
-
+  const { id } = useParams();
+  const [appointment, setAppointment] = useState({});
   const { addReport } = useReport();
   const navigate = useNavigate();
+  const [errorMessage, setErrorMessage] = useState("");
 
   useEffect(() => {
-    const loadAppointments = async () => {
+    const loadAppointment = async () => {
       try {
-        const appointmentData = await getAppointments();
-        setAppointments(appointmentData);
+        const appointmentData = await getAppointmentById(id);
+        setAppointment(appointmentData);
       } catch (error) {
-        console.error("Failed to fetch customers:", error);
+        console.error("Failed to fetch appointments:", error);
       }
     };
-    loadAppointments();
-  }, []);
 
-  const handleCustomerSelectChange = (e) => {
-    const id = e.target.value;
-    setSelectedAppointmentId(id);
-  };
+    loadAppointment();
+  }, []);
 
   async function add(target) {
     target.preventDefault();
+    const checkEmptyName = (value) => (value === "" ? null : value);
 
     try {
-      const selectedAppointment = appointments.find(
-        (appointment) => appointment.id === selectedAppointmentId
-      );
-
       const newReport = {
-        title: nameRef.current.value,
-        price: speciesRef.current.value,
-        appointment: selectedAppointment,
+        title: checkEmptyName(titleRef.current.value),
+        price: priceRef.current.value,
+        appointment: appointment,
       };
 
       const response = await createReport(newReport);
@@ -58,6 +45,8 @@ function CreateReportForm() {
       navigate("/report");
     } catch (error) {
       console.error("error", error);
+      setErrorMessage(error.response.data.data[0]);
+      setTimeout(() => setErrorMessage(""), 3000);
     }
   }
 
@@ -84,7 +73,7 @@ function CreateReportForm() {
             variant="outlined"
             inputRef={titleRef}
             type="text"
-            name="name"
+            name="title"
             color="success"
           />
         </div>
@@ -95,27 +84,20 @@ function CreateReportForm() {
             variant="outlined"
             inputRef={priceRef}
             type="text"
-            name="species"
+            name="price"
             color="success"
           />
         </div>
-        <FormControl required>
-          <InputLabel id="customer-select-label">Appointment</InputLabel>
-          <Select
-            labelId="customer-select-label"
-            id="customerSelect"
-            value={appointment?.appointmentDate}
-            label="Appointment *"
-            color="success"
-            onChange={handleCustomerSelectChange}
-          >
-            {appointments.map((appointment) => (
-              <MenuItem key={appointment?.id} value={appointment?.id}>
-                {appointment?.name}
-              </MenuItem>
-            ))}
-          </Select>
-        </FormControl>
+        <div>
+          <TextField
+            variant="outlined"
+            type="text"
+            id="appointment"
+            color="grey"
+            disabled={true}
+            value={appointment?.appointmentDate || ""}
+          />
+        </div>
 
         <Button
           variant="contained"
@@ -126,6 +108,18 @@ function CreateReportForm() {
           Add
         </Button>
       </form>
+      {errorMessage && (
+        <div
+          style={{
+            color: "#a20622",
+            marginTop: "5px",
+            display: "flex",
+            justifyContent: "center",
+          }}
+        >
+          {errorMessage}
+        </div>
+      )}
     </div>
   );
 }

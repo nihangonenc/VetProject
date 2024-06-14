@@ -9,7 +9,6 @@ import SendIcon from "@mui/icons-material/Send";
 import Select from "@mui/material/Select";
 import InputLabel from "@mui/material/InputLabel";
 import MenuItem from "@mui/material/MenuItem";
-import FormHelperText from "@mui/material/FormHelperText";
 import FormControl from "@mui/material/FormControl";
 
 function CreateAnimalForm() {
@@ -23,6 +22,8 @@ function CreateAnimalForm() {
   const dateOfBirthRef = useRef();
   const { addAnimal } = useAnimal();
   const navigate = useNavigate();
+  const today = new Date().toISOString().split("T")[0];
+  const [errorMessage, setErrorMessage] = useState("");
 
   useEffect(() => {
     const loadCustomers = async () => {
@@ -44,6 +45,7 @@ function CreateAnimalForm() {
 
   async function add(target) {
     target.preventDefault();
+    const checkEmptyName = (value) => (value === "" ? null : value);
 
     try {
       const selectedCustomer = customers.find(
@@ -51,20 +53,25 @@ function CreateAnimalForm() {
       );
 
       const newAnimal = {
-        name: nameRef.current.value,
+        name: checkEmptyName(nameRef.current.value),
         species: speciesRef.current.value,
         breed: breedRef.current.value,
         gender: genderRef.current.value,
         colour: colourRef.current.value,
         dateOfBirth: dateOfBirthRef.current.value,
-        customer: selectedCustomer,
+        customer: checkEmptyName(selectedCustomer),
       };
 
       const response = await createAnimal(newAnimal);
       addAnimal(response);
       navigate("/animal");
     } catch (error) {
-      console.error("error", error);
+      if (nameRef.current.value === "") {
+        setErrorMessage(error.response.data.data[0]);
+      } else {
+        setErrorMessage(error.response.data.message);
+      }
+      setTimeout(() => setErrorMessage(""), 3000);
     }
   }
 
@@ -147,6 +154,7 @@ function CreateAnimalForm() {
             type="date"
             name="dateOfBirth"
             color="success"
+            defaultValue={today}
           />
         </div>
         <FormControl required>
@@ -158,6 +166,8 @@ function CreateAnimalForm() {
             label="Customer *"
             color="success"
             onChange={handleCustomerSelectChange}
+            required={true}
+            sx={{ minWidth: 120 }}
           >
             {customers.map((customer) => (
               <MenuItem key={customer.id} value={customer.id}>
@@ -175,6 +185,18 @@ function CreateAnimalForm() {
           Add
         </Button>
       </form>
+      {errorMessage && (
+        <div
+          style={{
+            color: "#a20622",
+            marginTop: "5px",
+            display: "flex",
+            justifyContent: "center",
+          }}
+        >
+          {errorMessage}
+        </div>
+      )}
     </div>
   );
 }

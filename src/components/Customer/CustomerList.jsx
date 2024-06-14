@@ -1,6 +1,9 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import CustomerTableRow from "./CustomerTableRow";
-import { getCustomers } from "../../services/CustomerApiService";
+import {
+  getCustomers,
+  getCustomersSearchByName,
+} from "../../services/CustomerApiService";
 import { useCustomer } from "../../contexts/CustomerContext";
 import { styled } from "@mui/material/styles";
 import Table from "@mui/material/Table";
@@ -11,21 +14,41 @@ import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import Paper from "@mui/material/Paper";
 import CreateCustomerForm from "./CreateCustomerForm";
+import TextField from "@mui/material/TextField";
+import SearchOutlinedIcon from "@mui/icons-material/SearchOutlined";
+import InputAdornment from "@mui/material/InputAdornment";
 
 function CustomerList() {
   const { customers, updateCustomers } = useCustomer();
+  const [searchName, setSearchName] = useState("");
 
   useEffect(() => {
-    async function fetchData() {
-      try {
-        const customers = await getCustomers();
-        updateCustomers(customers);
-      } catch (error) {
-        console.error("Error fetching customers:", error);
+    if (searchName === "") {
+      async function fetchData() {
+        try {
+          const customers = await getCustomers();
+          updateCustomers(customers);
+        } catch (error) {
+          console.error("Error fetching customers:", error);
+        }
       }
+      fetchData();
     }
-    fetchData();
-  }, []);
+  }, [searchName]);
+
+  useEffect(() => {
+    if (searchName !== "") {
+      async function fetchData() {
+        try {
+          const customers = await getCustomersSearchByName(searchName);
+          updateCustomers(customers);
+        } catch (error) {
+          console.error("Error fetching customers:", error);
+        }
+      }
+      fetchData();
+    }
+  }, [searchName]);
 
   const StyledTableCell = styled(TableCell)(() => ({
     [`&.${tableCellClasses.head}`]: {
@@ -35,25 +58,58 @@ function CustomerList() {
     },
   }));
   return (
-    <>
+    <div style={{ marginBottom: "20px" }}>
       <CreateCustomerForm />
-      <h2
-        style={{ textAlign: "center", color: "#5d4037", marginBottom: "20px" }}
+      <div
+        style={{
+          display: "flex",
+          flexDirection: "row",
+          justifyContent: "flex-end",
+          gap: "200px",
+          marginRight: "250px",
+          marginBottom: "25px",
+        }}
       >
-        Client List
-      </h2>
+        <h2
+          style={{
+            textAlign: "center",
+            color: "#5d4037",
+            marginBottom: "20px",
+          }}
+        >
+          Client List
+        </h2>
+        <TextField
+          id="outlined-basic"
+          label="Search By Name"
+          placeholder="Search By Name"
+          variant="outlined"
+          color="success"
+          value={searchName}
+          type="text"
+          name="name"
+          onChange={(e) => setSearchName(e.target.value)}
+          InputProps={{
+            startAdornment: (
+              <InputAdornment position="start">
+                <SearchOutlinedIcon />
+              </InputAdornment>
+            ),
+          }}
+        />
+      </div>
+
       <TableContainer component={Paper} className="table">
         <Table aria-label="customized table">
           <TableHead>
             <TableRow>
-              <StyledTableCell>ID</StyledTableCell>
-              <StyledTableCell>Name</StyledTableCell>
-              <StyledTableCell>Phone</StyledTableCell>
-              <StyledTableCell>Mail</StyledTableCell>
-              <StyledTableCell>Address</StyledTableCell>
-              <StyledTableCell>City</StyledTableCell>
-              <StyledTableCell>Pets</StyledTableCell>
-              <StyledTableCell>Operations</StyledTableCell>
+              <StyledTableCell align="center">Name</StyledTableCell>
+              <StyledTableCell align="center">Phone</StyledTableCell>
+              <StyledTableCell align="center">Mail</StyledTableCell>
+              <StyledTableCell align="center">Address</StyledTableCell>
+              <StyledTableCell align="center">City</StyledTableCell>
+              <StyledTableCell align="center">Pets</StyledTableCell>
+              <StyledTableCell align="center">Operations</StyledTableCell>
             </TableRow>
           </TableHead>
           <TableBody>
@@ -63,7 +119,7 @@ function CustomerList() {
           </TableBody>
         </Table>
       </TableContainer>
-    </>
+    </div>
   );
 }
 

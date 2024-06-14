@@ -48,3 +48,13 @@ export const deleteCustomerById = async (id) => {
     throw error;
   }
 };
+
+export const getCustomersSearchByName = async (name) => {
+  //müşteri ismine göre filtreleme
+  try {
+    const response = await axios.get(`${apiUrl}/searchByName?name=${name}`);
+    return response.data.data;
+  } catch (error) {
+    throw error;
+  }
+};

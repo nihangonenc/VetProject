@@ -10,7 +10,6 @@ import TableContainer from "@mui/material/TableContainer";
 import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import Paper from "@mui/material/Paper";
-import CreateReportForm from "./CreateReportForm";
 
 function ReportList() {
   const { reports, updateReports } = useReport();
@@ -35,10 +34,14 @@ function ReportList() {
     },
   }));
   return (
-    <>
-      <CreateReportForm />
+    <div style={{ marginBottom: "20px" }}>
       <h2
-        style={{ textAlign: "center", color: "#5d4037", marginBottom: "20px" }}
+        style={{
+          textAlign: "center",
+          color: "#5d4037",
+          marginTop: "30px",
+          marginBottom: "20px",
+        }}
       >
         Report List
       </h2>
@@ -46,13 +49,11 @@ function ReportList() {
         <Table aria-label="customized table">
           <TableHead>
             <TableRow>
-              <StyledTableCell>ID</StyledTableCell>
-              <StyledTableCell>Title</StyledTableCell>
-              <StyledTableCell>Price</StyledTableCell>
-              <StyledTableCell>Doctor Name</StyledTableCell>
-              <StyledTableCell>Pet Name</StyledTableCell>
-              <StyledTableCell>Vaccines</StyledTableCell>
-              <StyledTableCell>Operations</StyledTableCell>
+              <StyledTableCell align="center">Title</StyledTableCell>
+              <StyledTableCell align="center">Price</StyledTableCell>
+              <StyledTableCell align="center">Doctor Name</StyledTableCell>
+              <StyledTableCell align="center">Pet Name</StyledTableCell>
+              <StyledTableCell align="center">Operations</StyledTableCell>
             </TableRow>
           </TableHead>
           <TableBody>
@@ -62,7 +63,7 @@ function ReportList() {
           </TableBody>
         </Table>
       </TableContainer>
-    </>
+    </div>
   );
 }
 

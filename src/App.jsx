@@ -24,6 +24,12 @@ import UpdateReportForm from "./components/Report/UpdateReportForm";
 import Reports from "./components/Report/Reports";
 import ReportList from "./components/Report/ReportList";
 import { ReportContextProvider } from "./contexts/ReportContext";
+import CreateReportForm from "./components/Report/CreateReportForm";
+import { VaccineContextProvider } from "./contexts/VaccineContext";
+import Vaccines from "./components/Vaccine/Vaccines";
+import VaccineList from "./components/Vaccine/VaccineList";
+import UpdateVaccineForm from "./components/Vaccine/UpdateVaccineForm";
+import CreateVaccineForm from "./components/Vaccine/CreateVaccineForm";
 
 function App() {
   return (
@@ -62,22 +68,36 @@ function App() {
           </Routes>
         </AvailableDateContextProvider>
       </DoctorContextProvider>
-      <AppointmentContextProvider>
-        <Routes>
-          <Route path="appointment" element={<Appointments />}>
-            <Route index element={<AppointmentList />} />
-            <Route path=":id/edit" element={<UpdateAppointmentForm />} />
-          </Route>
-        </Routes>
-      </AppointmentContextProvider>
       <ReportContextProvider>
+        <AppointmentContextProvider>
+          <Routes>
+            <Route path="appointment" element={<Appointments />}>
+              <Route index element={<AppointmentList />} />
+              <Route path=":id/edit" element={<UpdateAppointmentForm />} />
+              <Route path=":id/add/report" element={<CreateReportForm />} />
+            </Route>
+          </Routes>
+        </AppointmentContextProvider>
+      </ReportContextProvider>
+      <VaccineContextProvider>
+        <ReportContextProvider>
+          <Routes>
+            <Route path="report" element={<Reports />}>
+              <Route index element={<ReportList />} />
+              <Route path=":id/edit" element={<UpdateReportForm />} />
+              <Route path=":id/add/vaccine" element={<CreateVaccineForm />} />
+            </Route>
+          </Routes>
+        </ReportContextProvider>
+      </VaccineContextProvider>
+      <VaccineContextProvider>
         <Routes>
-          <Route path="report" element={<Reports />}>
-            <Route index element={<ReportList />} />
-            <Route path=":id/edit" element={<UpdateReportForm />} />
+          <Route path="vaccine" element={<Vaccines />}>
+            <Route index element={<VaccineList />} />
+            <Route path=":id/edit" element={<UpdateVaccineForm />} />
           </Route>
         </Routes>
-      </ReportContextProvider>
+      </VaccineContextProvider>
     </>
   );
 }

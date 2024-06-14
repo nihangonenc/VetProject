@@ -5,7 +5,7 @@ import { styled } from "@mui/material/styles";
 import TableCell, { tableCellClasses } from "@mui/material/TableCell";
 import TableRow from "@mui/material/TableRow";
 import IconButton from "@mui/material/IconButton";
-import Fingerprint from "@mui/icons-material/Fingerprint";
+import EditOutlinedIcon from "@mui/icons-material/EditOutlined";
 import DeleteIcon from "@mui/icons-material/Delete";
 
 function CustomerTableRow({
@@ -50,13 +50,12 @@ function CustomerTableRow({
 
   return (
     <StyledTableRow>
-      <StyledTableCell>{id}</StyledTableCell>
-      <StyledTableCell>{name}</StyledTableCell>
-      <StyledTableCell>{phone}</StyledTableCell>
-      <StyledTableCell>{mail}</StyledTableCell>
-      <StyledTableCell>{address}</StyledTableCell>
-      <StyledTableCell>{city}</StyledTableCell>
-      <StyledTableCell>
+      <StyledTableCell align="center">{name}</StyledTableCell>
+      <StyledTableCell align="center">{phone}</StyledTableCell>
+      <StyledTableCell align="center">{mail}</StyledTableCell>
+      <StyledTableCell align="center">{address}</StyledTableCell>
+      <StyledTableCell align="center">{city}</StyledTableCell>
+      <StyledTableCell align="center">
         <select>
           {animalList?.map((item, index) => (
             <option key={index} value={item.id}>
@@ -65,15 +64,11 @@ function CustomerTableRow({
           ))}
         </select>
       </StyledTableCell>
-      <StyledTableCell>
+      <StyledTableCell align="center">
         <IconButton aria-label="fingerprint" color="success">
-          <NavLink
-            style={{ textDecoration: "none", color: "#5d4037" }}
-            to={`${id}/edit`}
-          >
-            edit
+          <NavLink to={`${id}/edit`}>
+            <EditOutlinedIcon color="success" />
           </NavLink>
-          <Fingerprint />
         </IconButton>
         <IconButton aria-label="delete" onClick={deleteCustomer}>
           <DeleteIcon />
