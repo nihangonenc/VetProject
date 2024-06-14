@@ -69,6 +69,7 @@ function CreateAnimalForm() {
       if (nameRef.current.value === "") {
         setErrorMessage(error.response.data.data[0]);
       } else {
+        console.log(error);
         setErrorMessage(error.response.data.message);
       }
       setTimeout(() => setErrorMessage(""), 3000);
