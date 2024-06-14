@@ -60,7 +60,9 @@ function CreateAvailableDateForm() {
       if (selectedDoctorId === "") {
         setErrorMessage(error.response.data.data[0]);
       } else {
-        setErrorMessage(error.response.data.message);
+        setErrorMessage(
+          "This available date is already registered in the system."
+        );
       }
       setTimeout(() => setErrorMessage(""), 3000);
     }

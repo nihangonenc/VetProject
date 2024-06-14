@@ -57,7 +57,7 @@ function CreateVaccineForm() {
       if (nameRef.current.value === "") {
         setErrorMessage(error.response.data.data[0]);
       } else {
-        setErrorMessage(error.response.data.message);
+        setErrorMessage("The protection of this vaccine has not yet expired.");
       }
 
       setOpenModal(true);

@@ -20,9 +20,7 @@ function CreateAppointmentForm() {
   const [selectedDoctorId, setSelectedDoctorId] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
   const [openModal, setOpenModal] = useState(false);
-
   const appointmentDateRef = useRef();
-
   const { addAppointment } = useAppointment();
   const navigate = useNavigate();
   const today = new Date().toISOString().slice(0, 16);
@@ -78,13 +76,23 @@ function CreateAppointmentForm() {
         doctor: selectedDoctor,
       };
 
+      const minute = new Date(appointmentDateRef.current.value)
+        .toISOString()
+        .split(":")[1];
+
+      if (minute !== "00") {
+        setErrorMessage("Appointments can be scheduled on the hour.");
+        setOpenModal(true);
+        return;
+      }
       const response = await createAppointment(newAppointment);
       addAppointment(response);
 
       navigate("/appointment");
     } catch (error) {
       console.error("error", error);
-      setErrorMessage(error.response?.data?.message);
+
+      setErrorMessage("This appointment is already registered in the system.");
       setOpenModal(true);
     }
   }

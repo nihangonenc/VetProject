@@ -41,7 +41,7 @@ function CreateCustomerForm() {
       if (nameRef.current.value === "") {
         setErrorMessage(error.response.data.data[0]);
       } else {
-        setErrorMessage(error.response.data.message);
+        setErrorMessage("This customer is already registered in the system.");
       }
       setTimeout(() => setErrorMessage(""), 3000);
     }
